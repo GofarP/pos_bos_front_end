@@ -1,6 +1,6 @@
 import { ref, reactive, watch } from 'vue'
 import { userService } from '~/utils/user.service'
-import type { User, PaginationMeta } from '~/types/user.type'
+import type { User, PaginationMeta, Role } from '~/types/user.type'
 import { useSweetAlert } from '~/composables/useSweetAlert'
 import { useRuntimeConfig } from '#imports'
 
@@ -24,10 +24,11 @@ export function useUsers() {
     name: '',
     email: '',
     password: '',
+    roles: [] as Role[],
     photo: null as File | null
   })
 
-  const formErrors = ref({ name: '', email: '', password: '', photo: '' })
+  const formErrors = ref({ name: '', email: '', password: '', photo: '', roles: '' })
 
   // URL Resolver untuk Foto
   const getPhotoUrl = (path: string) => {
@@ -58,7 +59,7 @@ export function useUsers() {
     if (searchTimeout) {
       clearTimeout(searchTimeout)
     }
-    
+
     // Beri jeda waktu 500ms agar tidak berulang kali hit API saat mengetik cepat
     searchTimeout = setTimeout(() => {
       fetchUsers(1)
@@ -87,8 +88,9 @@ export function useUsers() {
     form.name = ''
     form.email = ''
     form.password = ''
+    form.roles = []
     form.photo = null
-    formErrors.value = { name: '', email: '', password: '', photo: '' }
+    formErrors.value = { name: '', email: '', password: '', photo: '', roles: '' }
     isModalOpen.value = true
   }
 
@@ -98,8 +100,9 @@ export function useUsers() {
     form.name = user.name
     form.email = user.email
     form.password = '' // Kosongkan password saat diedit
+    form.roles = user.roles || []
     form.photo = null
-    formErrors.value = { name: '', email: '', password: '', photo: '' }
+    formErrors.value = { name: '', email: '', password: '', photo: '', roles: '' }
     isModalOpen.value = true
   }
 
@@ -114,10 +117,17 @@ export function useUsers() {
       const formData = new FormData()
       formData.append('name', form.name)
       formData.append('email', form.email)
-      
+
       // Password (wajib jika tambah, opsional jika edit)
       if (form.password) {
         formData.append('password', form.password)
+      }
+
+      // Append roles (as JSON string or multiple fields depending on backend expectation)
+      // Since backend might not support it yet, we just append it as JSON string
+      if (form.roles && form.roles.length > 0) {
+        const roleIds = form.roles.map(r => r.id)
+        roleIds.forEach(id => formData.append('role_ids[]', id.toString()))
       }
 
       // Photo (opsional)
@@ -139,7 +149,7 @@ export function useUsers() {
       const data = error.response?.data
       if (data?.errors) {
         // Bersihkan error lama
-        formErrors.value = { name: '', email: '', password: '', photo: '' }
+        formErrors.value = { name: '', email: '', password: '', photo: '', roles: '' }
         // Masukkan error baru dari backend
         Object.assign(formErrors.value, data.errors)
       } else {
@@ -156,7 +166,7 @@ export function useUsers() {
       try {
         await userService.deleteUser(id)
         swal.showSuccess('Pengguna berhasil dihapus')
-        
+
         // Jika hapus di halaman terakhir dan sisa 1, balik ke halaman sebelumnya
         if (users.value.length === 1 && meta.value.page > 1) {
           fetchUsers(meta.value.page - 1)

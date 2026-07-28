@@ -1,17 +1,6 @@
 import { api } from './api'
 
-export interface Category {
-    id: number
-    name: string
-    description: string
-    created_at?: string
-    updated_at?: string
-}
-
-export interface CategoryForm {
-    name: string
-    description: string
-}
+import type { CategoryForm } from '~/types/category.type'
 
 
 export const categoryService = {

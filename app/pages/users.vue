@@ -62,6 +62,25 @@
         </div>
       </template>
 
+      <template #cell-roles="{ value }">
+        <div class="flex flex-wrap gap-1 max-w-[200px]">
+          <span 
+            v-for="role in (value || []).slice(0, 2)" 
+            :key="role.id"
+            class="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-50 text-blue-700 border border-blue-200 capitalize whitespace-nowrap"
+          >
+            {{ role.name }}
+          </span>
+          <span 
+            v-if="(value || []).length > 2" 
+            class="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-600 border border-gray-200 whitespace-nowrap"
+          >
+            +{{ value.length - 2 }} lainnya
+          </span>
+          <span v-if="!value || value.length === 0" class="text-xs text-gray-400 italic">Belum ada role</span>
+        </div>
+      </template>
+
       <template #cell-created_at="{ value }">
         <div class="text-sm text-gray-500">
           {{ new Date(value).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) }}
@@ -92,6 +111,18 @@
             v-model="form.email" 
             :error="formErrors.email"
           />
+
+          <div>
+            <AsyncMultiSelect
+              label="Role"
+              v-model="form.roles"
+              :fetch-options="fetchRoles"
+              display-key="name"
+              value-key="id"
+              placeholder="Cari dan pilih role..."
+              :error="formErrors.roles"
+            />
+          </div>
 
           <div>
             <div class="flex justify-between items-center mb-1.5">
@@ -127,6 +158,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { api } from '~/utils/api'
 
 const {
   users, meta, searchQuery, isLoading, isModalOpen, isEdit,
@@ -135,10 +167,21 @@ const {
   handleFileUpload
 } = useUsers()
 
+const fetchRoles = async (query: string) => {
+  try {
+    const response = await api.get(`/roles`, { params: { page: 1, limit: 20, search: query } })
+    return response.data?.data || []
+  } catch (error) {
+    console.error('Failed to fetch roles:', error)
+    return []
+  }
+}
+
 const columns = [
   { key: 'no', label: 'No' },
   { key: 'name', label: 'Nama' },
   { key: 'email', label: 'Email' },
+  { key: 'roles', label: 'Role' },
   { key: 'photo', label: 'Profil' },
   { key: 'created_at', label: 'Dibuat Pada' },
   { key: 'actions', label: 'Aksi' }
