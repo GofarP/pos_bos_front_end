@@ -53,6 +53,7 @@
 
 <script setup lang="ts">
 import type { Transaction } from '~/types/transaction.type'
+import '~/assets/css/receipt-print.css'
 
 defineProps<{
   transaction: Transaction | null
@@ -78,77 +79,3 @@ const formatDate = (dateStr: string) => {
   }).format(date)
 }
 </script>
-
-<style>
-@media print {
-  body > * {
-    display: none !important;
-  }
-  #printable-receipt {
-    display: block !important;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 80mm;
-    padding: 6mm;
-    margin: 0 auto;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 11px;
-    line-height: 1.4;
-    color: #000 !important;
-    background: #fff !important;
-  }
-
-  .receipt-header {
-    text-align: center;
-    margin-bottom: 8px;
-  }
-  .store-name {
-    font-size: 16px;
-    font-weight: bold;
-    margin: 0;
-  }
-  .store-address, .store-phone {
-    font-size: 10px;
-    margin: 0;
-  }
-
-  .receipt-divider {
-    border-bottom: 1px dashed #000;
-    margin: 6px 0;
-  }
-
-  .receipt-info .info-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-  }
-
-  .item-block {
-    margin-bottom: 4px;
-  }
-  .item-name {
-    font-weight: bold;
-    font-size: 11px;
-    margin: 0;
-  }
-  .item-calc {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-  }
-
-  .receipt-total {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    font-weight: bold;
-  }
-
-  .receipt-footer {
-    text-align: center;
-    font-size: 9px;
-    margin-top: 10px;
-  }
-}
-</style>
