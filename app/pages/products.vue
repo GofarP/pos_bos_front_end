@@ -22,7 +22,7 @@
     </div>
 
     <!-- Action Button -->
-    <div class="flex justify-end">
+    <div class="flex justify-end" v-if="hasPermission('create.product')">
       <Button color="green" @click="openAddModal" class="gap-2 shadow-sm">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -83,6 +83,8 @@
 
       <template #cell-actions="{ row }">
         <TableActions 
+          :show-edit="hasPermission('edit.product')"
+          :show-delete="hasPermission('delete.product')"
           @edit="openEditModal(row)"
           @delete="deleteProduct(row.id)"
         />
@@ -178,6 +180,8 @@ import { onMounted, watch } from 'vue'
 import { useProducts } from '~/composables/useProducts'
 import { categoryService } from '~/utils/category.service'
 import { useDebounceFn } from '@vueuse/core'
+
+const { hasPermission } = useUser()
 
 const {
   products,

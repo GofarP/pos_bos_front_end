@@ -22,7 +22,7 @@
     </div>
 
     <!-- Action Button -->
-    <div class="flex justify-end">
+    <div class="flex justify-end" v-if="hasPermission('create.role')">
       <Button color="green" @click="openAddModal" class="gap-2 shadow-sm">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -75,6 +75,8 @@
 
       <template #cell-actions="{ row }">
         <TableActions 
+          :show-edit="hasPermission('edit.role')"
+          :show-delete="hasPermission('delete.role')"
           @edit="openEditModal(row)"
           @delete="handleDelete(row.id)"
         />
@@ -134,6 +136,8 @@
 import { onMounted } from 'vue'
 import { api } from '~/utils/api'
 import { useRoles } from '~/composables/useRoles'
+
+const { hasPermission } = useUser()
 
 const {
   roles, meta, searchQuery, isLoading, isModalOpen, isEdit,

@@ -174,18 +174,27 @@
               <span class="receipt-total-amount">{{ formatCurrency(lastTransaction?.total_amount || 0) }}</span>
             </div>
             <div class="receipt-actions">
+              <button @click="printReceipt" class="receipt-print-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M3 9.456c0-1.081.768-2.015 1.837-2.175a48.049 48.049 0 0 1 1.913-.247m0 0a48.1 48.1 0 0 1 14.5 0m-14.5 0V5.25A2.25 2.25 0 0 1 9 3h6a2.25 2.25 0 0 1 2.25 2.25v2.706m-14.5 0c-.24.03-.48.062-.72.096" />
+                </svg>
+                Cetak Struk
+              </button>
               <button @click="closeReceipt" class="receipt-close-btn">Transaksi Baru</button>
             </div>
           </div>
         </div>
       </Transition>
     </Teleport>
+
+    <PrintReceiptModal :transaction="lastTransaction" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { usePos } from '~/composables/usePos'
+import { printThermalReceipt } from '~/utils/receiptPrinter'
 import '~/assets/css/pos.css'
 
 definePageMeta({ layout: 'default' })
@@ -202,6 +211,12 @@ const {
   addToCart, updateQuantity, removeFromCart, clearCart,
   formatCurrency, processTransaction, closeReceipt
 } = usePos()
+
+const printReceipt = (size: '58mm' | '80mm' = '80mm') => {
+  if (lastTransaction.value) {
+    printThermalReceipt(lastTransaction.value, size)
+  }
+}
 
 onMounted(() => fetchProducts())
 </script>

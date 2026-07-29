@@ -22,7 +22,7 @@
     </div>
 
     <!-- Action Button -->
-    <div class="flex justify-end">
+    <div class="flex justify-end" v-if="hasPermission('create.category')">
       <Button color="green" @click="openAddModal" class="gap-2 shadow-sm">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -59,6 +59,8 @@
 
       <template #cell-actions="{ row }">
         <TableActions 
+          :show-edit="hasPermission('edit.category')"
+          :show-delete="hasPermission('delete.category')"
           @edit="openEditModal(row)"
           @delete="handleDelete(row.id)"
         />
@@ -103,7 +105,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+const { hasPermission } = useUser()
 
 const {
   categories, meta, searchQuery, isLoading, isModalOpen, isEdit,

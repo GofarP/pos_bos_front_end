@@ -1,23 +1,39 @@
 import { defineNuxtRouteMiddleware, navigateTo, useCookie } from '#imports'
+import { useUser } from '~/composables/useUser'
 
-export default defineNuxtRouteMiddleware((to, from) => {
-  // Ambil status login dari cookie (is_logged_in)
+const routePermissions: Record<string, string> = {
+  '/category': 'view.category',
+  '/products': 'create.product',
+  '/pos': 'create.transaction',
+  '/transactions': 'view.transaction',
+  '/users': 'view.user',
+  '/roles': 'view.role',
+  '/permissions': 'view.permission'
+}
+
+export default defineNuxtRouteMiddleware(async (to, from) => {
   const isLoggedIn = useCookie('is_logged_in')
-
-  // Daftar halaman yang tidak butuh autentikasi
   const publicPages = ['/login', '/register']
-  
   const isPublicPage = publicPages.includes(to.path)
 
-  // Skenario 1: Belum login tapi mencoba mengakses halaman yang diproteksi (seperti /users)
   if (!isLoggedIn.value && !isPublicPage) {
-    // Hentikan proses render halaman dan langsung alihkan ke /login
     return navigateTo('/login')
   }
 
-  // Skenario 2: Sudah login tapi mencoba masuk ke halaman login
   if (isLoggedIn.value && isPublicPage) {
-    // Alihkan kembali ke beranda (dashboard)
     return navigateTo('/')
+  }
+
+  if (isLoggedIn.value && process.client) {
+    const { user, fetchCurrentUser, hasPermission } = useUser()
+    
+    if (!user.value) {
+      await fetchCurrentUser()
+    }
+
+    const requiredPermission = routePermissions[to.path]
+    if (requiredPermission && !hasPermission(requiredPermission)) {
+      return navigateTo('/')
+    }
   }
 })

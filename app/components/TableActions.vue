@@ -1,6 +1,7 @@
 <template>
   <div class="flex items-center gap-2">
     <button 
+      v-if="showEdit"
       @click="$emit('edit')"
       class="p-1.5 text-yellow-500 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
       title="Edit"
@@ -10,6 +11,7 @@
       </svg>
     </button>
     <button 
+      v-if="showDelete"
       @click="$emit('delete')"
       class="p-1.5 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
       title="Hapus"
@@ -22,6 +24,14 @@
 </template>
 
 <script setup lang="ts">
+withDefaults(defineProps<{
+  showEdit?: boolean
+  showDelete?: boolean
+}>(), {
+  showEdit: true,
+  showDelete: true
+})
+
 defineEmits<{
   (e: 'edit'): void
   (e: 'delete'): void

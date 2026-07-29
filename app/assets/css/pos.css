@@ -403,9 +403,26 @@
 .receipt-divider { height: 1px; background: #e5e7eb; }
 .receipt-total { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; font-weight: 600; color: #374151; }
 .receipt-total-amount { font-size: 1.15rem; font-weight: 800; color: #6366f1; }
-.receipt-actions { margin-top: 0.25rem; }
+.receipt-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+.receipt-print-btn {
+  flex: 1;
+  padding: 0.8rem;
+  background: #f3f4f6;
+  color: #374151;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.2s;
+}
+.receipt-print-btn:hover { background: #e5e7eb; }
 .receipt-close-btn {
-  width: 100%;
+  flex: 1;
   padding: 0.8rem;
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
