@@ -31,20 +31,27 @@ export function useUser() {
     }
   }
 
-  const hasPermission = (perm: string): boolean => {
+  const hasPermission = (perm: string | string[]): boolean => {
     if (!user.value && permissions.value.length === 0) return false
     if (user.value?.roles?.some(r => r.name === 'Superadmin')) {
       return true
+    }
+    if (Array.isArray(perm)) {
+      return perm.some(p => permissions.value.includes(p))
     }
     return permissions.value.includes(perm)
   }
 
   const hasAnyPermission = (perms: string[]): boolean => {
+    return hasPermission(perms)
+  }
+
+  const hasAllPermissions = (perms: string[]): boolean => {
     if (!user.value && permissions.value.length === 0) return false
     if (user.value?.roles?.some(r => r.name === 'Superadmin')) {
       return true
     }
-    return perms.some(p => permissions.value.includes(p))
+    return perms.every(p => permissions.value.includes(p))
   }
 
   return {
@@ -53,6 +60,7 @@ export function useUser() {
     isLoading,
     fetchCurrentUser,
     hasPermission,
-    hasAnyPermission
+    hasAnyPermission,
+    hasAllPermissions
   }
 }

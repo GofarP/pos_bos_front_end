@@ -174,7 +174,7 @@ interface MenuItem {
   name: string
   path: string
   icon: string
-  permission?: string
+  permission?: string | string[]
   children?: MenuItem[]
 }
 

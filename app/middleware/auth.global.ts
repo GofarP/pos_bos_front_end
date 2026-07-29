@@ -1,9 +1,9 @@
 import { defineNuxtRouteMiddleware, navigateTo, useCookie } from '#imports'
 import { useUser } from '~/composables/useUser'
 
-const routePermissions: Record<string, string> = {
+const routePermissions: Record<string, string | string[]> = {
   '/category': 'view.category',
-  '/products': 'create.product',
+  '/products': ['view.product', 'create.product'],
   '/pos': 'create.transaction',
   '/transactions': 'view.transaction',
   '/users': 'view.user',
