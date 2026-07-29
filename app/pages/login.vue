@@ -72,4 +72,8 @@ definePageMeta({
 // Clean Code: Semua logika form ditarik dari composables!
 // File ini sekarang murni hanya untuk UI.
 const { form, errors, isLoading, handleLogin } = useAuth()
+
+useHead({
+  title: 'Masuk'
+})
 </script>

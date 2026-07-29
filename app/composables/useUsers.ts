@@ -162,7 +162,11 @@ export function useUsers() {
 
   // Delete Handler
   const handleDelete = async (id: number) => {
-    if (confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
+    const isConfirmed = await swal.showConfirm(
+      'Hapus Pengguna?',
+      'Apakah Anda yakin ingin menghapus pengguna ini? Tindakan ini tidak dapat dibatalkan.'
+    )
+    if (isConfirmed) {
       try {
         await userService.deleteUser(id)
         swal.showSuccess('Pengguna berhasil dihapus')

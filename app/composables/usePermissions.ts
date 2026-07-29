@@ -71,9 +71,9 @@ export function usePermissions() {
         isModalOpen.value = false
     }
 
-    // Fungsi Simpan (Create / Update)
     const savePermission = async () => {
         formErrors.value = { name: '', description: '' }
+
         isSaving.value = true
 
         try {

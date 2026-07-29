@@ -29,4 +29,8 @@
 
 <script setup lang="ts">
 // Page metadata defaults to 'default' layout
+
+useHead({
+  title: 'Dashboard'
+})
 </script>

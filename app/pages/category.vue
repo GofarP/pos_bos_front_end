@@ -121,4 +121,8 @@ const columns = [
 onMounted(() => {
   fetchCategories()
 })
+
+useHead({
+  title: 'Manajemen Kategori'
+})
 </script>

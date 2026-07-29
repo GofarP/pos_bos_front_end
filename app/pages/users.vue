@@ -190,4 +190,8 @@ const columns = [
 onMounted(() => {
   fetchUsers()
 })
+
+useHead({
+  title: 'Manajemen Pengguna'
+})
 </script>
