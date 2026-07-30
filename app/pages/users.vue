@@ -162,7 +162,7 @@
 import { onMounted } from 'vue'
 import { api } from '~/utils/api'
 
-const { hasPermission } = useUser()
+const { hasPermission } = useAuthUser()
 
 const {
   users, meta, searchQuery, isLoading, isModalOpen, isEdit,

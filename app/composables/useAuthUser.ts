@@ -10,12 +10,19 @@ export interface UserProfile {
   permissions?: string[]
 }
 
-export function useUser() {
+export function useAuthUser() {
   const user = useState<UserProfile | null>('user_profile', () => null)
   const permissions = useState<string[]>('user_permissions', () => [])
   const isLoading = useState<boolean>('user_loading', () => false)
 
-  const fetchCurrentUser = async () => {
+  const clearUser = () => {
+    user.value = null
+    permissions.value = []
+  }
+
+  const fetchCurrentUser = async (force = false) => {
+    if (user.value && !force) return
+
     isLoading.value = true
     try {
       const response = await api.get('/me')
@@ -26,6 +33,7 @@ export function useUser() {
       }
     } catch (err) {
       console.error('Failed to fetch current user:', err)
+      clearUser()
     } finally {
       isLoading.value = false
     }
@@ -58,6 +66,7 @@ export function useUser() {
     user,
     permissions,
     isLoading,
+    clearUser,
     fetchCurrentUser,
     hasPermission,
     hasAnyPermission,

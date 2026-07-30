@@ -1,5 +1,5 @@
-import { defineNuxtRouteMiddleware, navigateTo, useCookie } from '#imports'
-import { useUser } from '~/composables/useUser'
+import { defineNuxtRouteMiddleware, navigateTo, useCookie, showError, createError } from '#imports'
+import { useAuthUser } from '~/composables/useAuthUser'
 
 const routePermissions: Record<string, string | string[]> = {
   '/category': 'view.category',
@@ -25,7 +25,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
 
   if (isLoggedIn.value && process.client) {
-    const { user, fetchCurrentUser, hasPermission } = useUser()
+    const { user, fetchCurrentUser, hasPermission } = useAuthUser()
     
     if (!user.value) {
       await fetchCurrentUser()
@@ -33,7 +33,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     const requiredPermission = routePermissions[to.path]
     if (requiredPermission && !hasPermission(requiredPermission)) {
-      return navigateTo('/')
+      return showError(createError({
+        statusCode: 403,
+        statusMessage: 'Akses Ditolak: Anda tidak memiliki izin untuk mengakses halaman ini.',
+        fatal: true
+      }))
     }
   }
 })

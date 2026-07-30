@@ -139,14 +139,14 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from '#imports'
 import { authService } from '~/utils/auth.service'
-import { useUser } from '~/composables/useUser'
+import { useAuthUser } from '~/composables/useAuthUser'
 
 const isOpen = ref(false)
 const route = useRoute()
 const router = useRouter()
 const swal = useSweetAlert()
 
-const { fetchCurrentUser, hasPermission } = useUser()
+const { fetchCurrentUser, hasPermission, clearUser } = useAuthUser()
 
 onMounted(() => {
   fetchCurrentUser()
@@ -164,6 +164,7 @@ const handleLogout = async () => {
   } catch (error) {
     console.error('Logout error', error)
   } finally {
+    clearUser()
     authService.removeToken()
     swal.showSuccess('Logout berhasil')
     router.push('/login')

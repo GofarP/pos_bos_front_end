@@ -222,21 +222,19 @@
         </div>
       </template>
     </BaseModal>
-
-    <PrintReceiptModal :transaction="selectedTransaction" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useTransactions } from '~/composables/useTransactions'
-import { useUser } from '~/composables/useUser'
+import { useAuthUser } from '~/composables/useAuthUser'
 import { printThermalReceipt } from '~/utils/receiptPrinter'
 
 definePageMeta({ layout: 'default' })
 useHead({ title: 'Riwayat Transaksi — POS BOS' })
 
-const { hasPermission } = useUser()
+const { hasPermission } = useAuthUser()
 
 const {
   transactions,

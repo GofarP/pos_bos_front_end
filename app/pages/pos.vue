@@ -186,8 +186,6 @@
         </div>
       </Transition>
     </Teleport>
-
-    <PrintReceiptModal :transaction="lastTransaction" />
   </div>
 </template>
 

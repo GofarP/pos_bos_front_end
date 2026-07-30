@@ -137,7 +137,7 @@ import { onMounted } from 'vue'
 import { api } from '~/utils/api'
 import { useRoles } from '~/composables/useRoles'
 
-const { hasPermission } = useUser()
+const { hasPermission } = useAuthUser()
 
 const {
   roles, meta, searchQuery, isLoading, isModalOpen, isEdit,

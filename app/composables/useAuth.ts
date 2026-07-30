@@ -1,8 +1,13 @@
 import { ref } from 'vue'
-import { useRouter, useCookie } from '#imports'
+import { useRouter } from '#imports'
+import { useAuthUser } from '~/composables/useAuthUser'
+import { authService } from '~/utils/auth.service'
+import { useSweetAlert } from '~/composables/useSweetAlert'
 
 export function useAuth() {
   const router = useRouter()
+  const { fetchCurrentUser, clearUser } = useAuthUser()
+  const swal = useSweetAlert()
   
   const form = ref({ email: '', password: '' })
   const errors = ref({ email: '', password: '', server: '' })
@@ -13,15 +18,12 @@ export function useAuth() {
     isLoading.value = true
 
     try {
-      const response = await authService.login(form.value)
+      await authService.login(form.value)
       
-      // Cookie HttpOnly (access_token & refresh_token) otomatis dipasang oleh browser dari respon server
-      // Kita tidak perlu menyimpan token secara manual di Javascript lagi.
-
+      clearUser()
+      await fetchCurrentUser(true)
       
-      const swal = useSweetAlert()
       swal.showSuccess('Login berhasil!')
-      
       router.push('/')
 
     } catch (err: any) {

@@ -51,8 +51,8 @@
   flex-shrink: 0;
 }
 .search-bar:focus-within {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
 }
 .search-icon { width: 1.1rem; height: 1.1rem; color: #9ca3af; flex-shrink: 0; }
 .search-input {
@@ -101,16 +101,16 @@
   border-radius: 9999px;
   font-size: 0.82rem;
   font-weight: 600;
-  color: #6366f1;
+  color: #059669;
   cursor: pointer;
   transition: all 0.2s;
 }
-.load-more-btn:hover:not(:disabled) { border-color: #6366f1; background: #f0f0ff; }
+.load-more-btn:hover:not(:disabled) { border-color: #059669; background: #ecfdf5; }
 .load-more-btn:disabled { color: #9ca3af; cursor: default; }
 .load-more-spinner {
   width: 0.9rem; height: 0.9rem;
   border: 2px solid #e5e7eb;
-  border-top-color: #6366f1;
+  border-top-color: #059669;
   border-radius: 50%;
   animation: pos-spin 0.7s linear infinite;
 }
@@ -130,9 +130,9 @@
   gap: 0.4rem;
 }
 .product-card:hover:not(.out-of-stock) {
-  border-color: #6366f1;
+  border-color: #059669;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.12);
+  box-shadow: 0 8px 24px rgba(5, 150, 105, 0.12);
 }
 .product-card.out-of-stock { opacity: 0.55; cursor: not-allowed; background: #f9fafb; }
 
@@ -154,7 +154,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6366f1;
+  color: #059669;
 }
 .product-icon svg { width: 1.3rem; height: 1.3rem; }
 
@@ -169,7 +169,7 @@
   -webkit-box-orient: vertical;
 }
 .product-sku { font-size: 0.7rem; color: #9ca3af; }
-.product-price { font-size: 0.85rem; font-weight: 700; color: #6366f1; margin-top: auto; }
+.product-price { font-size: 0.85rem; font-weight: 700; color: #059669; margin-top: auto; }
 .out-label {
   text-align: center;
   font-size: 0.7rem;
@@ -193,7 +193,7 @@
 .spinner {
   width: 2.5rem; height: 2.5rem;
   border: 3px solid #e5e7eb;
-  border-top-color: #6366f1;
+  border-top-color: #059669;
   border-radius: 50%;
   animation: pos-spin 0.8s linear infinite;
 }
@@ -223,7 +223,7 @@
   flex-shrink: 0;
 }
 .cart-title-area { display: flex; align-items: center; gap: 0.75rem; }
-.cart-icon { width: 1.5rem; height: 1.5rem; color: #6366f1; }
+.cart-icon { width: 1.5rem; height: 1.5rem; color: #059669; }
 .cart-title { font-size: 1rem; font-weight: 700; color: #111827; }
 .cart-count { font-size: 0.75rem; color: #6b7280; }
 .clear-cart-btn {
@@ -293,7 +293,7 @@
 .qty-value { font-size: 0.85rem; font-weight: 700; min-width: 1.2rem; text-align: center; color: #111827; }
 
 .cart-item-subtotal { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; }
-.cart-item-subtotal p { font-size: 0.8rem; font-weight: 700; color: #6366f1; white-space: nowrap; }
+.cart-item-subtotal p { font-size: 0.8rem; font-weight: 700; color: #059669; white-space: nowrap; }
 .remove-btn { background: none; border: none; color: #d1d5db; cursor: pointer; padding: 0; transition: color 0.2s; }
 .remove-btn:hover { color: #ef4444; }
 
@@ -324,13 +324,13 @@
 .summary-divider { height: 1px; background: #f3f4f6; margin: 0.1rem 0; }
 .summary-total-row { display: flex; justify-content: space-between; align-items: baseline; }
 .summary-total-label { font-size: 0.9rem; font-weight: 700; color: #111827; }
-.summary-total-value { font-size: 1.1rem; font-weight: 800; color: #6366f1; }
+.summary-total-value { font-size: 1.1rem; font-weight: 800; color: #059669; }
 
 .pay-btn {
   margin-top: 0.25rem;
   width: 100%;
   padding: 0.85rem;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, #10b981, #059669);
   color: white;
   font-weight: 700;
   font-size: 0.95rem;
@@ -342,9 +342,9 @@
   justify-content: center;
   gap: 0.5rem;
   transition: all 0.2s;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
 }
-.pay-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4); }
+.pay-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(5, 150, 105, 0.4); }
 .pay-btn:disabled { background: #d1d5db; box-shadow: none; cursor: not-allowed; color: #9ca3af; }
 .pay-icon { width: 1.2rem; height: 1.2rem; }
 .pay-spinner {
@@ -356,7 +356,6 @@
 }
 
 .mobile-tab-bar { display: none; }
-.mobile-hidden { display: none !important; }
 
 .receipt-overlay {
   position: fixed; inset: 0;
@@ -402,7 +401,7 @@
 .receipt-item-name { flex: 1; }
 .receipt-divider { height: 1px; background: #e5e7eb; }
 .receipt-total { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; font-weight: 600; color: #374151; }
-.receipt-total-amount { font-size: 1.15rem; font-weight: 800; color: #6366f1; }
+.receipt-total-amount { font-size: 1.15rem; font-weight: 800; color: #059669; }
 .receipt-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
 .receipt-print-btn {
   flex: 1;
@@ -424,7 +423,7 @@
 .receipt-close-btn {
   flex: 1;
   padding: 0.8rem;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, #10b981, #059669);
   color: white;
   font-weight: 700;
   border: none;
@@ -483,7 +482,7 @@
     font-weight: 600;
     transition: color 0.2s;
   }
-  .tab-btn.active { color: #6366f1; }
+  .tab-btn.active { color: #059669; }
   .tab-icon { width: 1.4rem; height: 1.4rem; }
   .tab-cart-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
   .cart-badge {

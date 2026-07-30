@@ -1,11 +1,9 @@
 <template>
   <div class="space-y-6">
-    <!-- Header & Action -->
     <div class="flex justify-between items-center gap-4">
       <h1 class="text-2xl font-bold text-gray-900">Manajemen Produk</h1>
     </div>
 
-    <!-- Search Bar -->
     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col sm:flex-row gap-4 sm:items-center">
       <div class="flex-1 w-full relative">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
@@ -21,7 +19,6 @@
       </div>
     </div>
 
-    <!-- Action Button -->
     <div class="flex justify-end" v-if="hasPermission('create.product')">
       <Button color="green" @click="openAddModal" class="gap-2 shadow-sm">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
@@ -31,16 +28,22 @@
       </Button>
     </div>
 
-    <!-- Data Table -->
+    <div v-if="isLoading" class="flex flex-col items-center justify-center py-20">
+      <div class="w-10 h-10 border-4 border-gray-200 border-t-emerald-600 rounded-full animate-spin mb-4"></div>
+      <p class="text-sm text-gray-500 font-medium animate-pulse">Memuat data produk...</p>
+    </div>
+
     <DataTable
+      v-else
       :columns="columns"
       :data="products"
-      :loading="isLoading"
-      :currentPage="currentPage"
-      :totalPages="totalPages"
-      :totalItems="totalItems"
-      :limit="limit"
-      @page-change="fetchProducts"
+      :pagination="{
+        currentPage: currentPage,
+        totalPages: totalPages,
+        totalItems: totalItems,
+        itemsPerPage: limit
+      }"
+      @page-change="changePage"
     >
       <template #cell-no="{ index }">
         <span class="text-gray-500">{{ (currentPage - 1) * limit + index + 1 }}</span>
@@ -91,97 +94,84 @@
       </template>
     </DataTable>
 
-    <!-- Modal Form -->
     <BaseModal 
       v-model="isModalOpen" 
       :title="isEditMode ? 'Edit Produk' : 'Tambah Produk'"
     >
-      <div class="space-y-4">
-        <!-- Name -->
-        <Input 
-          label="Nama Produk" 
-          v-model="form.name" 
-          placeholder="Masukkan nama produk..."
-          :error="formErrors.name"
-          required
-        />
-        
-        <!-- Grid for SKU & Category -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- SKU -->
-          <Input 
-            label="SKU (Opsional)" 
-            v-model="form.sku" 
-            placeholder="Contoh: PRD-001"
-            :error="formErrors.sku"
+      <form id="productForm" @submit.prevent="saveProduct" novalidate>
+        <div class="space-y-4">
+          <Input
+            label="Nama Produk"
+            v-model="form.name"
+            :error="formErrors.name"
+            placeholder="Masukkan nama produk..."
           />
-          
-          <!-- Category Async Select -->
+
+          <Input
+            label="SKU (Stock Keeping Unit)"
+            v-model="form.sku"
+            :error="formErrors.sku"
+            placeholder="Contoh: EL-001"
+          />
+
           <AsyncSelect
-            v-model="form.category_id"
             label="Kategori"
-            placeholder="Cari kategori..."
-            :fetchOptions="searchCategories"
-            displayKey="name"
-            valueKey="id"
+            v-model="form.category_id"
+            :fetch-options="searchCategories"
+            display-key="name"
+            value-key="id"
+            placeholder="Cari dan pilih kategori..."
             :error="formErrors.category_id"
           />
-        </div>
-        
-        <!-- Grid for Price & Stock -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Price -->
-          <Input 
-            label="Harga (Rp)" 
-            type="number"
-            v-model="form.price" 
-            placeholder="0"
-            :error="formErrors.price"
-            required
-            min="0"
-          />
-          
-          <!-- Stock -->
-          <Input 
-            label="Stok Awal" 
-            type="number"
-            v-model="form.stock" 
-            placeholder="0"
-            :error="formErrors.stock"
-            required
-            min="0"
-          />
-        </div>
 
-        <!-- Description with TextEditor -->
-        <div class="flex flex-col gap-1.5">
-          <label class="text-sm font-medium text-gray-700">Deskripsi Produk (Opsional)</label>
-          <TextEditor 
-            v-model="form.description" 
-            placeholder="Tuliskan deskripsi lengkap mengenai produk ini..."
-          />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="Harga (Rp)"
+              type="number"
+              v-model="form.price"
+              :error="formErrors.price"
+              placeholder="0"
+            />
+
+            <Input
+              label="Stok"
+              type="number"
+              v-model="form.stock"
+              :error="formErrors.stock"
+              placeholder="0"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi Produk</label>
+            <TextEditor
+              v-model="form.description"
+              placeholder="Jelaskan spesifikasi atau deskripsi produk..."
+            />
+          </div>
         </div>
-      </div>
+      </form>
 
       <template #footer>
-        <div class="flex justify-end gap-3 w-full">
-          <Button color="gray" variant="outline" @click="closeModal">Batal</Button>
-          <Button color="blue" @click="saveProduct" :loading="isSaving">
-            {{ isSaving ? 'Menyimpan...' : 'Simpan Produk' }}
-          </Button>
-        </div>
+        <Button form="productForm" type="submit" color="green" :disabled="isSaving" class="w-full sm:w-auto">
+          {{ isSaving ? 'Menyimpan...' : 'Simpan' }}
+        </Button>
+
+        <Button type="button" color="gray" @click="closeModal" class="mt-3 sm:mt-0 w-full sm:w-auto">
+          Batal
+        </Button>
       </template>
     </BaseModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import { useAuthUser } from '~/composables/useAuthUser'
 import { useProducts } from '~/composables/useProducts'
 import { categoryService } from '~/utils/category.service'
-import { useDebounceFn } from '@vueuse/core'
 
-const { hasPermission } = useUser()
+const { hasPermission } = useAuthUser()
 
 const {
   products,
@@ -205,7 +195,6 @@ const {
   formatCurrency
 } = useProducts()
 
-// Define table columns
 const columns = [
   { key: 'no', label: 'No' },
   { key: 'name', label: 'Nama Produk' },
@@ -216,7 +205,6 @@ const columns = [
   { key: 'actions', label: 'Aksi' }
 ]
 
-// Function to fetch categories for AsyncSelect
 const searchCategories = async (query: string) => {
   try {
     const response = await categoryService.getCategories(1, 15, query)
@@ -227,14 +215,16 @@ const searchCategories = async (query: string) => {
   }
 }
 
-// Search with debounce (if @vueuse/core is not installed, it might break, but we used it previously? Wait, I will write a simple manual debounce just in case)
+const changePage = (page: number) => {
+  fetchProducts(page)
+}
+
 let searchTimeout: any = null
 watch(searchQuery, () => {
   if (searchTimeout) clearTimeout(searchTimeout)
   searchTimeout = setTimeout(() => {
-    currentPage.value = 1
     fetchProducts(1)
-  }, 500)
+  }, 400)
 })
 
 onMounted(() => {
@@ -242,6 +232,6 @@ onMounted(() => {
 })
 
 useHead({
-  title: 'Manajemen Produk'
+  title: 'Manajemen Produk — POS BOS'
 })
 </script>

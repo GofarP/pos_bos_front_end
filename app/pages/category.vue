@@ -105,7 +105,7 @@
 </template>
 
 <script setup lang="ts">
-const { hasPermission } = useUser()
+const { hasPermission } = useAuthUser()
 
 const {
   categories, meta, searchQuery, isLoading, isModalOpen, isEdit,

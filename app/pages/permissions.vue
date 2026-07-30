@@ -100,7 +100,7 @@
 import { onMounted } from 'vue'
 import { usePermissions } from '~/composables/usePermissions'
 
-const { hasPermission } = useUser()
+const { hasPermission } = useAuthUser()
 
 const {
   permissions, meta, searchQuery, isLoading, isModalOpen, isEdit,
