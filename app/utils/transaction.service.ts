@@ -16,5 +16,9 @@ export const transactionService = {
 
   async cancelTransaction(id: number) {
     return await api.post(`/transactions/${id}/cancel`)
+  },
+
+  async getDashboardSummary() {
+    return await api.get('/transactions/summary')
   }
 }

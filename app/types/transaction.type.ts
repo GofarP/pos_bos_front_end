@@ -41,3 +41,9 @@ export interface CartItem {
   quantity: number
   subtotal: number
 }
+
+export interface DashboardSummary {
+  total_sales: number
+  new_orders: number
+  products_sold: number
+}
