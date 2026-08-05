@@ -40,8 +40,8 @@ jobs:
           username: ${{ secrets.CPANEL_USERNAME }}
           password: ${{ secrets.CPANEL_PASSWORD }}
           port: ${{ secrets.CPANEL_PORT }}
-          # FTP diarahkan langsung dari pengaturan akun FTP cPanel
-          server-dir: ./
+          # FTP menembak langsung ke folder subdomain dari titik terluar (Home)
+          server-dir: posbos.gofarputraperdana.my.id/
           # Folder hasil masakan Nuxt (SPA)
           local-dir: .output/public/
           dangerous-clean-slate: false
