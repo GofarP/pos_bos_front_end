@@ -1,0 +1,1 @@
+import{n as e,t}from"./CS5lknDJ.js";var n={async login(e){return await t.post(`/login`,e)},async logout(){return await t.post(`/logout`)},isLoggedIn(){return!!e(`is_logged_in`).value},removeToken(){let t=e(`is_logged_in`);t.value=null}};export{n as t};

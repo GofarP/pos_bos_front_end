@@ -1,0 +1,1 @@
+import{t as e}from"./CS5lknDJ.js";var t={getCategories(t=1,n=10,r=``){return e.get(`/categories`,{params:{page:t,limit:n,search:r}})},createCategory(t){return e.post(`/categories`,t)},updateCategory(t,n){return e.put(`/categories/${t}`,n)},deleteCategory(t){return e.delete(`/categories/${t}`)}};export{t};
