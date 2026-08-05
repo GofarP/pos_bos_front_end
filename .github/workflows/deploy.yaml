@@ -1,0 +1,47 @@
+name: Deploy Nuxt Frontend to cPanel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Generate Static Site
+        env:
+          # Variabel ini akan dipakai otomatis oleh Nuxt saat build di GitHub
+          NUXT_PUBLIC_API_BASE: https://api-posbos.gofarputraperdana.my.id
+        run: npx nuxi generate
+
+      - name: Upload to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.CPANEL_HOST }}
+          username: ${{ secrets.CPANEL_USERNAME }}
+          password: ${{ secrets.CPANEL_PASSWORD }}
+          port: ${{ secrets.CPANEL_PORT }}
+          # Pastikan diarahkan ke folder utama website Anda di cPanel
+          server-dir: public_html/
+          # Folder hasil masakan Nuxt (SPA)
+          local-dir: .output/public/
+          dangerous-clean-slate: false
