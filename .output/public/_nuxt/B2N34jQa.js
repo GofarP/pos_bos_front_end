@@ -1,1 +1,0 @@
-import{L as e,P as t,p as n}from"./B4vA1385.js";import{t as r}from"./BDNMzG2s.js";var i={},a={class:`min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6`};function o(r,i){return t(),n(`div`,a,[e(r.$slots,`default`)])}var s=r(i,[[`render`,o]]);export{s as default};
