@@ -31,7 +31,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       await fetchCurrentUser()
     }
 
-    const requiredPermission = routePermissions[to.path]
+    // Hapus trailing slash di production (contoh: /users/ menjadi /users)
+    const normalizedPath = (to.path.endsWith('/') && to.path !== '/') ? to.path.slice(0, -1) : to.path
+    const requiredPermission = routePermissions[normalizedPath]
     if (requiredPermission && !hasPermission(requiredPermission)) {
       return abortNavigation(createError({
         statusCode: 403,
