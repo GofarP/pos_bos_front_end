@@ -33,10 +33,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     const requiredPermission = routePermissions[to.path]
     if (requiredPermission && !hasPermission(requiredPermission)) {
-      return showError(createError({
+      return abortNavigation(createError({
         statusCode: 403,
-        statusMessage: 'Akses Ditolak: Anda tidak memiliki izin untuk mengakses halaman ini.',
-        fatal: true
+        statusMessage: 'Akses Ditolak: Anda tidak memiliki izin untuk mengakses halaman ini.'
       }))
     }
   }
