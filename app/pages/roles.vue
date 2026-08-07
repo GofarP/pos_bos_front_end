@@ -68,9 +68,9 @@
         </div>
       </template>
       
-      <!-- Remove HTML tags for simple table display -->
+      <!-- Sanitize HTML for secure table display -->
       <template #cell-description="{ value }">
-         <div class="truncate max-w-[200px]" v-html="value"></div>
+         <div class="truncate max-w-[200px]" v-html="sanitizeHtml(value)"></div>
       </template>
 
       <template #cell-actions="{ row }">
